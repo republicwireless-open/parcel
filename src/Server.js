@@ -86,7 +86,7 @@ function middleware(bundler) {
   };
 }
 
-async function serve(bundler, port, useHTTPS = false) {
+async function serve(bundler, port, useHTTPS = false, domain = 'localhost') {
   let handler = middleware(bundler);
   let server;
   if (!useHTTPS) {
@@ -116,7 +116,7 @@ async function serve(bundler, port, useHTTPS = false) {
 
       logger.persistent(
         `Server running at ${logger.chalk.cyan(
-          `${useHTTPS ? 'https' : 'http'}://localhost:${server.address().port}`
+          `${useHTTPS ? 'https' : 'http'}://${domain}:${server.address().port}`
         )} ${addon}`
       );
 

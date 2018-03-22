@@ -14,6 +14,10 @@ program
     parseInt
   )
   .option(
+    '--dev-domain <domain>',
+    'set the domain to serve on. defaults to "localhost"'
+  )
+  .option(
     '--hmr-port <port>',
     'set the port to serve HMR websockets, defaults to random',
     parseInt
@@ -163,12 +167,15 @@ async function bundle(main, command) {
   const bundler = new Bundler(main, command);
 
   if (command.name() === 'serve') {
-    const server = await bundler.serve(command.port || 1234, command.https);
+    const server = await bundler.serve(
+      command.port || 1234,
+      command.https,
+      command.devDomain
+    );
     if (command.open) {
       await require('./utils/openInBrowser')(
-        `${command.https ? 'https' : 'http'}://localhost:${
-          server.address().port
-        }`,
+        `${command.https ? 'https' : 'http'}://${command.devDomain ||
+          'localhost'}:${server.address().port}`,
         command.open
       );
     }
